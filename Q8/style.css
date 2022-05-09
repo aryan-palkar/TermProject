@@ -1,0 +1,11 @@
+body{
+    background-color: aqua;
+}
+
+#text{
+    font-family: system-ui;
+    text-align: center;
+    top: 40%;
+    left: 40%;
+    position: absolute;
+}
