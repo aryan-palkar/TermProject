@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            background-color: aqua;
+        }
+        
+        h3{
+            font-family: system-ui;  
+        }
+    </style>
+</head>
+
+<body>
+    <h1><b>User Information</h1>
+    <form name="frm">
+        User ID : <input type="text" name="uname"><br>
+        <input type="button" name="btn" value="Submit" onclick=fncDisplayInfo()>
+    </form>
+    <div id='content'>
+        
+    </div>
+
+
+    <script language="javascript">
+
+    let xmlContent = '';
+    let contentDiv = document.getElementById('content');
+
+    function fncDisplayInfo() {
+    fetch('./User.xml').then((response)=> {
+        response.text().then((xml)=>{
+            xmlContent = xml;
+            
+            let userid = document.frm.uname.value;
+            let flag = false;
+            var data;
+
+            let parser = new DOMParser();
+            let xmlDOM = parser.parseFromString(xmlContent, 'application/xml');
+            let users = xmlDOM.querySelectorAll('user');
+
+            users.forEach(userXmlNode => {
+                if(userXmlNode.children[0].innerHTML == userid){
+                    data = userXmlNode;
+                    flag = true;
+                }
+            });
+            
+            while(contentDiv.firstChild) {
+                contentDiv.removeChild(contentDiv.firstChild);
+            }
+
+            if(flag){
+                let h = document.createElement('h3');
+                h.innerText = "User ID : " + data.children[0].innerHTML;
+                contentDiv.appendChild(h);
+
+                h = document.createElement('h3');
+                h.innerText = "Username : " + data.children[1].innerHTML;
+                contentDiv.appendChild(h);
+                    
+                h = document.createElement('h3');
+                h.innerText = "Address : " + data.children[2].innerHTML;
+                contentDiv.appendChild(h);
+
+                h = document.createElement('h3');
+                h.innerText = "Phone Number : " + data.children[0].innerHTML;
+                contentDiv.appendChild(h);
+
+                h = document.createElement('h3');
+                h.innerText = "Email Id : " + data.children[0].innerHTML;
+                contentDiv.appendChild(h);
+            }else{
+                let h = document.createElement('h3');
+                h.innerText = "No user Found";
+                contentDiv.appendChild(h);
+            }
+        });
+    });
+    }
+    </script>
+
+</body>
+</html>
